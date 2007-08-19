@@ -5,7 +5,7 @@
 
 Summary:	Open-source software for intra-institutional web authentication
 Name:		pubcookie
-Version:	3.3.2c
+Version:	3.3.2d
 Release:	%mkrel 1
 Group:		System/Servers
 License:	Apache License
@@ -85,6 +85,9 @@ find . -type f|xargs file|grep 'CRLF'|cut -d: -f1|xargs perl -p -i -e 's/\r//'
 find . -type f|xargs file|grep 'text'|cut -d: -f1|xargs perl -p -i -e 's/\r//'
 
 %build
+%serverbuild
+export CFLAGS="$CFLAGS -DLDAP_DEPRECATED"
+
 rm -f configure
 libtoolize --copy --force; aclocal-1.7; autoconf
 
@@ -167,5 +170,3 @@ fi
 %doc doc/*.html doc/*.css
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/httpd/modules.d/%{mod_conf}
 %attr(0755,root,root) %{_libdir}/apache-extramodules/%{mod_so}
-
-
