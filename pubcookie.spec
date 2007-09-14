@@ -5,8 +5,8 @@
 
 Summary:	Open-source software for intra-institutional web authentication
 Name:		pubcookie
-Version:	3.3.2d
-Release:	%mkrel 2
+Version:	3.3.3
+Release:	%mkrel 1
 Group:		System/Servers
 License:	Apache License
 URL:		http://www.pubcookie.org/
