@@ -31,6 +31,7 @@ BuildRequires:	file
 BuildRequires:	autoconf2.5
 BuildRequires:	automake1.7
 BuildRequires:	libtool
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 Pubcookie consists of a standalone login server and modules for common web
