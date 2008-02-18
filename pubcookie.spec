@@ -3,10 +3,10 @@
 %define mod_conf A62_%{mod_name}.conf
 %define mod_so %{mod_name}.so
 
-Summary:	Open-source software for intra-institutional web authentication
+Summary:	Intra-institutional web authentication
 Name:		pubcookie
 Version:	3.3.3
-Release:	%mkrel 3
+Release:	%mkrel 4
 Group:		System/Servers
 License:	Apache License
 URL:		http://www.pubcookie.org/
@@ -41,7 +41,7 @@ solution for single sign-on authentication to websites throughout an
 institution.
 
 %package -n	apache-%{mod_name}
-Summary:	Open-source software for intra-institutional web authentication
+Summary:	Intra-institutional web authentication
 Group:		System/Servers
 Requires(pre): rpm-helper
 Requires(postun): rpm-helper
