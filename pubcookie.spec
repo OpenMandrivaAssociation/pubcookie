@@ -110,7 +110,7 @@ install -d %{buildroot}%{_sysconfdir}/httpd/modules.d
 install -d %{buildroot}%{_sysconfdir}/xinetd.d
 install -d %{buildroot}%{_libdir}/apache-extramodules
 install -d %{buildroot}%{_datadir}/%{name}/login_templates.default
-install -d %{buildroot}%{_localstatedir}/%{name}/keys
+install -d %{buildroot}%{_localstatedir}/lib/%{name}/keys
 install -d %{buildroot}%{_sbindir}
 install -d %{buildroot}/var/www/cgi-bin
 
@@ -160,8 +160,8 @@ fi
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/%{name}/starter.key
 %attr(0755,root,root) %{_sbindir}/keyclient
 %attr(0755,root,root) %{_sbindir}/keyserver
-%dir %attr(0755,root,root) %{_localstatedir}/%{name}
-%dir %attr(0755,root,root) %{_localstatedir}/%{name}/keys
+%dir %attr(0755,root,root) %{_localstatedir}/lib/%{name}
+%dir %attr(0755,root,root) %{_localstatedir}/lib/%{name}/keys
 %{_datadir}/%{name}
 %attr(0755,root,root) /var/www/cgi-bin/%{name}.cgi
 
