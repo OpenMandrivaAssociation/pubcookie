@@ -6,7 +6,7 @@
 Summary:	Intra-institutional web authentication
 Name:		pubcookie
 Version:	3.3.3
-Release:	%mkrel 4
+Release:	%mkrel 5
 Group:		System/Servers
 License:	Apache License
 URL:		http://www.pubcookie.org/
