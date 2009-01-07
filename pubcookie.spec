@@ -6,7 +6,7 @@
 Summary:	Intra-institutional web authentication
 Name:		pubcookie
 Version:	3.3.3
-Release:	%mkrel 7
+Release:	%mkrel 8
 Group:		System/Servers
 License:	Apache License
 URL:		http://www.pubcookie.org/
@@ -16,6 +16,7 @@ Source2:	pubcookie.xinetd
 Patch0:		pubcookie-DESTDIR.diff
 Patch1:		pubcookie-paths.diff
 Patch2:		pubcookie-3.3.0a-pki_dir.diff
+Patch3:		pubcookie-3.3.3-format_not_a_string_literal_and_no_format_arguments.diff
 Requires:	xinetd
 Requires:	rootcerts
 Requires:	openssl
@@ -67,6 +68,7 @@ institution.
 %patch0 -p0
 %patch1 -p1
 %patch2 -p0
+%patch3 -p0
 
 cp %{SOURCE1} %{mod_conf}
 cp %{SOURCE2} pubcookie.xinetd
