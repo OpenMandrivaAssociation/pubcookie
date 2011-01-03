@@ -6,7 +6,7 @@
 Summary:	Intra-institutional web authentication
 Name:		pubcookie
 Version:	3.3.3
-Release:	%mkrel 11
+Release:	%mkrel 12
 Group:		System/Servers
 License:	Apache License
 URL:		http://www.pubcookie.org/
@@ -30,7 +30,7 @@ BuildRequires:	krb5-devel
 BuildRequires:	libfcgi-devel
 BuildRequires:	file
 BuildRequires:	autoconf2.5
-BuildRequires:	automake1.7
+BuildRequires:	automake
 BuildRequires:	libtool
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
@@ -91,7 +91,7 @@ find . -type f|xargs file|grep 'text'|cut -d: -f1|xargs perl -p -i -e 's/\r//'
 export CFLAGS="$CFLAGS -DLDAP_DEPRECATED"
 
 rm -f configure
-libtoolize --copy --force; aclocal-1.7; autoconf
+libtoolize --copy --force; aclocal; autoconf
 
 %configure2_5x \
     --enable-apache \
