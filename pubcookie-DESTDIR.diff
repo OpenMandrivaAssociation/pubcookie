@@ -1,0 +1,209 @@
+--- Makefile.in	2006-12-16 00:13:35.000000000 +0100
++++ Makefile.in.oden	2007-03-11 15:12:15.000000000 +0100
+@@ -13,17 +13,34 @@
+ MAKE_APACHE=@MAKE_APACHE@$(MAKE)
+ 
+ CC=@CC@
++DESTDIR=
+ 
+ prefix=@prefix@
+ srcdir=@srcdir@
+ builddir=@builddir@
+ 
++abs_builddir=@abs_builddir@
++abs_srcdir=@abs_srcdir@
++bindir=@bindir@
++sbindir=@sbindir@
++exec_prefix=@eprefix@
++program_prefix=
++program_suffix=
++includedir=@includedir@
++libdir=@libdir@
++mandir=@mandir@
++localstatedir=@localstatedir@
++datadir=@datadir@
++sysconfdir=@sysconfdir@
++libexecdir=@libexecdir@
++
+ PUBCOOKIE_DIR=$(prefix)
+-KEY_DIR=$(PUBCOOKIE_DIR)/keys
+-TEMPLATE_DIR=$(PUBCOOKIE_DIR)/login_templates
+-LOGIN_DIR=$(PUBCOOKIE_DIR)/login
+-CERT_DB_DIR=$(PUBCOOKIE_DIR)/keys
+-LOGIN_MEDIA_DIR=$(PUBCOOKIE_DIR)/login/media
++KEY_DIR=$(localstatedir)/pubcookie/keys
++TEMPLATE_DIR=$(datadir)/pubcookie/login_templates
++LOGIN_DIR=$(datadir)/pubcookie/login
++CERT_DB_DIR=$(localstatedir)/pubcookie/keys
++LOGIN_IMG_DIR=$(datadir)/pubcookie/login/images
++LOGIN_MEDIA_DIR=$(datadir)/pubcookie/login/media
+ 
+ CERT_DB_SOURCE=@CERT_DB_PATH@
+ 
+@@ -101,11 +118,9 @@
+ 		  $(builddir)/src/verify_shadow.o \
+ 		  $(builddir)/src/verify_uwsecurid.o \
+ 		  $(builddir)/src/verify_ldap.o \
+-		  @SNPRINTF_0@ \
+ 		  $(builddir)/src/verify.o
+ 
+ VERIFY_SRC=$(srcdir)/src/verify.c \
+-		   @SNPRINTF_C@ \
+ 		   $(srcdir)/src/verify_alwaystrue.c \
+ 		   $(srcdir)/src/verify_fork.c \
+ 		   $(srcdir)/src/verify_kerberos4.c \
+@@ -116,7 +131,6 @@
+ 
+ FLAVOR_SRC=$(srcdir)/src/flavor.c \
+ 		   $(srcdir)/src/ntmpl.c \
+-		   @SNPRINTF_C@ \
+ 		   $(srcdir)/src/flavor_basic.c \
+ 		   $(srcdir)/src/flavor_uwsecurid.c \
+ 		   $(srcdir)/src/flavor_getcred.c
+@@ -126,13 +140,11 @@
+ 		  $(builddir)/src/flavor_getcred.o \
+ 		  $(builddir)/src/flavor_uwsecurid.o \
+ 		  $(builddir)/src/ntmpl.o \
+-		  @SNPRINTF_0@ \
+ 		  $(VERIFIERS)
+ 
+ INDEX_FILES=$(builddir)/index.cgi
+ 
+ INDEX_SRC=$(srcdir)/src/index.cgi.c \
+-		  @SNPRINTF_C@ \
+ 		  $(VERIFY_SRC) \
+ 		  $(FLAVOR_SRC)
+ 
+@@ -161,7 +173,6 @@
+ LIB_SRC=$(srcdir)/src/libpubcookie.c \
+ 		$(srcdir)/src/base64.c \
+ 		$(srcdir)/src/strlcpy.c \
+-		@SNPRINTF_C@ \
+ 		$(srcdir)/src/pbc_myconfig.c \
+ 		$(srcdir)/src/security_legacy.c \
+ 		$(srcdir)/src/pbc_logging.c \
+@@ -172,7 +183,6 @@
+ LIB_OBJ=$(builddir)/src/libpubcookie.o \
+ 		$(builddir)/src/base64.o \
+ 		$(builddir)/src/strlcpy.o \
+-		@SNPRINTF_0@ \
+ 		$(builddir)/src/pbc_myconfig.o \
+ 		$(builddir)/src/security_legacy.o \
+ 		$(builddir)/src/pbc_logging.o \
+@@ -374,51 +384,52 @@
+ # Installation Targets
+ 
+ install: $(KEY_DIR) @install_login@ @install_apache@ 
+-@IF_MOD@	$(INSTALL_BIN) keyclient $(PUBCOOKIE_DIR)
++#@IF_MOD@	$(INSTALL_BIN) keyclient $(PUBCOOKIE_DIR)
++
++install-login: @no_login@ $(LOGIN_DIR) $(TEMPLATE_DIR) $(TEMPLATE_DIR).default $(LOGIN_TEMPLATES) $(LOGIN_MEDIA_DIR) $(TEMPLATE_DIR).default/media $(LOGIN_MEDIA) login_server sysconfdir sbindir
+ 
+-install-login: @no_login@ $(LOGIN_DIR) $(TEMPLATE_DIR) $(TEMPLATE_DIR).default $(LOGIN_TEMPLATES) $(LOGIN_MEDIA_DIR) $(TEMPLATE_DIR).default/media $(LOGIN_MEDIA) login_server
+ 	@for file in $(INDEX_FILES); do \
+-		echo $(INSTALL_BIN) $$file $(LOGIN_DIR); \
+-		$(INSTALL_BIN) $$file $(LOGIN_DIR); \
++		echo $(INSTALL_BIN) $$file $(DESTDIR)$(LOGIN_DIR); \
++		$(INSTALL_BIN) $$file $(DESTDIR)$(LOGIN_DIR); \
+ 	done
+ 	@for file in $(LOGIN_TEMPLATES); do \
+-		echo $(INSTALL_OTHER) $$file $(TEMPLATE_DIR).default; \
+-		$(INSTALL_OTHER) $$file $(TEMPLATE_DIR).default; \
++		echo $(INSTALL_OTHER) $$file $(DESTDIR)$(TEMPLATE_DIR).default; \
++		$(INSTALL_OTHER) $$file $(DESTDIR)$(TEMPLATE_DIR).default; \
+ 	done
+ 	@for file in $(LOGIN_TEMPLATES); do \
+ 		bfile=`basename $$file`; \
+ 		$(TEST) ! -f $(TEMPLATE_DIR)/$$bfile && \
+-		 	echo $(INSTALL_OTHER) $$file $(TEMPLATE_DIR) && \
+-			$(INSTALL_OTHER) $$file $(TEMPLATE_DIR); \
++		 	echo $(INSTALL_OTHER) $$file $(DESTDIR)$(TEMPLATE_DIR) && \
++			$(INSTALL_OTHER) $$file $(DESTDIR)$(TEMPLATE_DIR); \
+ 		true; \
+ 	done
+ 	@for file in $(LOGIN_MEDIA); do \
+-		echo $(INSTALL_OTHER) $$file $(TEMPLATE_DIR).default/media; \
+-		$(INSTALL_OTHER) $$file $(TEMPLATE_DIR).default/media; \
++		echo $(INSTALL_OTHER) $$file $(DESTDIR)$(TEMPLATE_DIR).default/media; \
++		$(INSTALL_OTHER) $$file $(DESTDIR)$(TEMPLATE_DIR).default/media; \
+ 	done
+ 	@for file in $(LOGIN_MEDIA); do \
+ 		bfile=`basename $$file`; \
+ 		$(TEST) ! -f $(LOGIN_MEDIA_DIR)/$$bfile && \
+-			echo $(INSTALL_OTHER) $$file $(LOGIN_MEDIA_DIR) && \
+-			$(INSTALL_OTHER) $$file $(LOGIN_MEDIA_DIR); \
++			echo $(INSTALL_OTHER) $$file $(DESTDIR)$(LOGIN_MEDIA_DIR) && \
++			$(INSTALL_OTHER) $$file $(DESTDIR)$(LOGIN_MEDIA_DIR); \
+ 		true; \
+ 	done
+ 	@for file in $(KEYMGT_FILES); do \
+-		echo $(INSTALL_BIN) $$file $(PUBCOOKIE_DIR); \
+-		$(INSTALL_BIN) $$file $(PUBCOOKIE_DIR); \
++		echo $(INSTALL_BIN) $$file $(DESTDIR)$(PUBCOOKIE_DIR); \
++		$(INSTALL_BIN) $$file $(DESTDIR)$(PUBCOOKIE_DIR); \
+ 	done
+ 	@for file in $(CERT_DB_SOURCE)/cert7.db $(CERT_DB_SOURCE)/key3.db; do \
+ 		$(TEST) "x$(CERT_DB_SOURCE)" != "x" && \
+-			echo $(INSTALL_OTHER) $$file $(CERT_DB_DIR) && \
+-			$(INSTALL_OTHER) $$file $(CERT_DB_DIR); \
++			echo $(INSTALL_OTHER) $$file $(DESTDIR)$(CERT_DB_DIR) && \
++			$(INSTALL_OTHER) $$file $(DESTDIR)$(CERT_DB_DIR); \
+ 		true; \
+ 	done
+-	$(INSTALL_OTHER) doc/starter.key $(PUBCOOKIE_DIR)
+-	$(INSTALL_OTHER) doc/config.login.sample $(PUBCOOKIE_DIR)
++	$(INSTALL_OTHER) doc/starter.key $(DESTDIR)$(PUBCOOKIE_DIR)
++	$(INSTALL_OTHER) doc/config.login.sample $(DESTDIR)$(PUBCOOKIE_DIR)
+ 	@$(TEST) ! -f $(PUBCOOKIE_DIR)/config && \
+ 		echo $(INSTALL_OTHER) doc/config.login.sample \
+-			 $(PUBCOOKIE_DIR)/config && \
+-		$(INSTALL_OTHER) doc/config.login.sample $(PUBCOOKIE_DIR)/config; \
++			 $(DESTDIR)$(PUBCOOKIE_DIR)/config && \
++		$(INSTALL_OTHER) doc/config.login.sample $(DESTDIR)$(PUBCOOKIE_DIR)/config; \
+ 		true
+ 
+ install-apache: @no_module@
+@@ -426,30 +437,36 @@
+ 	(cd module; $(MAKE) install)
+ 
+ $(PUBCOOKIE_DIR):
+-	$(INSTALL_DIR) $(PUBCOOKIE_DIR)
++	$(INSTALL_DIR) $(DESTDIR)$(PUBCOOKIE_DIR)
+ 
+ $(KEY_DIR): $(PUBCOOKIE_DIR)
+-	$(INSTALL_DIR) $(KEY_DIR)
++	$(INSTALL_DIR) $(DESTDIR)$(KEY_DIR)
+ 
+ $(LOGIN_DIR): $(PUBCOOKIE_DIR)
+-	$(INSTALL_DIR) $(LOGIN_DIR)
++	$(INSTALL_DIR) $(DESTDIR)$(LOGIN_DIR)
+ 
+ #$(LOGIN_IMG_DIR): $(PUBCOOKIE_DIR)
+ #	$(INSTALL_DIR) $(LOGIN_IMG_DIR)
+ $(LOGIN_MEDIA_DIR): $(PUBCOOKIE_DIR)
+-	$(INSTALL_DIR) $(LOGIN_MEDIA_DIR)
++	$(INSTALL_DIR) $(DESTDIR)$(LOGIN_MEDIA_DIR)
+ 
+ $(TEMPLATE_DIR): $(PUBCOOKIE_DIR)
+-	$(INSTALL_DIR) $(TEMPLATE_DIR)
++	$(INSTALL_DIR) $(DESTDIR)$(TEMPLATE_DIR)
+ 
+ $(TEMPLATE_DIR).default: $(PUBCOOKIE_DIR)
+-	$(INSTALL_DIR) $(TEMPLATE_DIR).default
++	$(INSTALL_DIR) $(DESTDIR)$(TEMPLATE_DIR).default
+ 
+ $(TEMPLATE_DIR).default/media: $(TEMPLATE_DIR).default
+-	$(INSTALL_DIR) $(TEMPLATE_DIR).default/media
++	$(INSTALL_DIR) $(DESTDIR)$(TEMPLATE_DIR).default/media
+ 
+ $(LIB_OBJ): $(LIB_HEAD) $(builddir)/src/pbc_path.h $(srcdir)/src/pbc_version.h.in $(builddir)/src/config.h
+ 
++sysconfdir:
++	$(INSTALL_DIR) $(DESTDIR)$(sysconfdir)/pubcookie
++
++sbindir:
++	$(INSTALL_DIR) $(DESTDIR)$(sbindir)
++
+ # Test Targets
+ 
+ test:: verify

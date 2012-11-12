@@ -1,0 +1,28 @@
+--- doc/config.login.sample	2006-05-11 19:39:47.000000000 +0200
++++ doc/config.login.sample.oden	2006-05-11 19:47:25.000000000 +0200
+@@ -5,12 +5,12 @@
+ basic_verifier: alwaystrue
+ 
+ # SSL session keypair
+-ssl_key_file: /etc/httpd/conf/ssl.key/server.key
+-ssl_cert_file: /etc/httpd/conf/ssl.crt/server.crt
++ssl_key_file: /etc/pki/tls/private/localhost.key
++ssl_cert_file: /etc/pki/tls/certs/localhost.crt
+ 
+ # granting keypair 
+-granting_key_file: /usr/local/pubcookie/keys/pubcookie_granting.key
+-granting_cert_file: /usr/local/pubcookie/keys/pubcookie_granting.cert 
++granting_key_file: /var/lib/pubcookie/keys/pubcookie_granting.key
++granting_cert_file: /var/lib/pubcookie/keys/pubcookie_granting.crt
+ 
+ # login server config
+ login_uri: https://login.example.edu/
+@@ -21,7 +21,7 @@
+ # keyserver config
+ keymgt_uri: https://login.example.edu:2222
+ keyserver_client_list: login.example.edu trusted.example.edu
+-ssl_ca_file: /etc/httpd/conf/ssl.crt/ca-bundle.crt
++ssl_ca_file: /etc/pki/tls/certs/ca-bundle.crt
+ 
+ # site-specific policies
+ default_l_expire: 8h

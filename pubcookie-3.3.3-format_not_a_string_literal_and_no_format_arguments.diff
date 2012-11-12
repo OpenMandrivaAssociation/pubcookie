@@ -1,0 +1,11 @@
+--- src/mod_pubcookie.c	2007-09-07 01:01:24.000000000 +0200
++++ src/mod_pubcookie.c.oden	2009-01-07 16:39:02.000000000 +0100
+@@ -3894,7 +3894,7 @@ static int login_reply_handler (request_
+             post_data = a;
+         }
+ 
+-        ap_rprintf (r, post_reply_2_html);
++        ap_rprintf (r, "%s", post_reply_2_html);
+ 
+     } else {                    /* do a get */
+ 

@@ -1,0 +1,76 @@
+diff -Naur pubcookie-3.3.2c/doc/config.login.sample pubcookie-3.3.2c.oden/doc/config.login.sample
+--- pubcookie-3.3.2c/doc/config.login.sample	2006-12-16 00:13:35.000000000 +0100
++++ pubcookie-3.3.2c.oden/doc/config.login.sample	2007-03-11 16:06:17.000000000 +0100
+@@ -16,7 +16,7 @@
+ login_uri: https://login.example.edu/
+ login_host: login.example.edu
+ enterprise_domain: .example.edu
+-logout_prog: /logout/index.cgi
++logout_prog: /cgi-bin/pubcookie.cgi
+ 
+ # keyserver config
+ keymgt_uri: https://login.example.edu:2222
+diff -Naur pubcookie-3.3.2c/src/index.cgi.h pubcookie-3.3.2c.oden/src/index.cgi.h
+--- pubcookie-3.3.2c/src/index.cgi.h	2006-12-16 00:13:35.000000000 +0100
++++ pubcookie-3.3.2c.oden/src/index.cgi.h	2007-03-11 15:51:39.000000000 +0100
+@@ -159,7 +159,7 @@
+ 
+ #define RIDE_FREE_TIME (10 * 60)
+ #define LOGIN_DIR "/"
+-#define THIS_CGI "cindex.cgi"
++#define THIS_CGI "pubcookie.cgi"
+ #define REFRESH "0"
+ #define DEFAULT_LOGIN_EXPIRE (8 * 60 * 60)
+ #define APP_LOGOUT_STR "app_logout_string"
+diff -Naur pubcookie-3.3.2c/src/pbc_path.h.in pubcookie-3.3.2c.oden/src/pbc_path.h.in
+--- pubcookie-3.3.2c/src/pbc_path.h.in	2006-12-16 00:13:35.000000000 +0100
++++ pubcookie-3.3.2c.oden/src/pbc_path.h.in	2007-03-11 15:50:24.000000000 +0100
+@@ -28,39 +28,39 @@
+ #ifndef PBC_PATH_H
+ #define PBC_PATH_H
+ 
+-#define PBC_PATH (libpbc_config_getstring(p, "pbc_path", "@prefix@/"))
++#define PBC_PATH (libpbc_config_getstring(p, "pbc_path", "@sysconfdir@/pubcookie/"))
+ /* the login server builds it's key Filenames from the hostname     */
+ #if defined (WIN32)
+ #  define PBC_KEY_DIR (AddSystemRoot("\\inetsrv\\pubcookie\\keys"))
+ #else
+-#  define PBC_KEY_DIR (libpbc_config_getstring(p, "keydir", "@prefix@/keys"))
++#  define PBC_KEY_DIR (libpbc_config_getstring(p, "keydir", "@localstatedir@/pubcookie/keys"))
+ #endif
+ 
+ /* where the runtime configuration file lives */
+-#define PBC_CONFIG "@prefix@/config"
++#define PBC_CONFIG "@sysconfdir@/pubcookie/config"
+ 
+ /* Where to find templates */
+-#define TMPL_FNAME (libpbc_config_getstring(p, "template_root", "@prefix@/login_templates"))
++#define TMPL_FNAME (libpbc_config_getstring(p, "template_root", "@datadir@/pubcookie/login_templates"))
+ 
+ /* suffix for seperate config files for components */
+ #define PBC_SUBCONFIG (libpbc_config_getstring(p, "subconfig_suffix", ".conf"))
+ 
+ /* file to get the list of ok browsers from */
+-#define OK_BROWSERS_FILE (libpbc_config_getstring(p, "ok_browsers", "@prefix@/ok_browsers"))
++#define OK_BROWSERS_FILE (libpbc_config_getstring(p, "ok_browsers", "@sysconfdir@/pubcookie/ok_browsers"))
+ 
+ /* file to get browser information from */
+-#define BROWSERS_FILE (libpbc_config_getstring(p, "browsers", "@prefix@/browsers"))
++#define BROWSERS_FILE (libpbc_config_getstring(p, "browsers", "@sysconfdir@/pubcookie/browsers"))
+ 
+ /* getcred authz file */
+-#define GETCRED_AUTHZ (libpbc_config_getstring(p, "getcred_authz_file", "@prefix@/getcred_authz"))
++#define GETCRED_AUTHZ (libpbc_config_getstring(p, "getcred_authz_file", "@sysconfdir@/pubcookie/getcred_authz"))
+ 
+ /* The keyclient.  This is probably better defined elsewhere, but I dunno. */
+ 
+-#define KEYCLIENT (libpbc_config_getstring(p, "keyclient", "@prefix@/keyclient"))
++#define KEYCLIENT (libpbc_config_getstring(p, "keyclient", "@sbindir@/keyclient"))
+ 
+ /* The path to the cert db, if this is using the Netscape SDK */
+ 
+-#define CERT_DB_PATH (libpbc_config_getstring(p, "cert_db_path", "@prefix@/keys"))
++#define CERT_DB_PATH (libpbc_config_getstring(p, "cert_db_path", "@localstatedir@/pubcookie/keys"))
+ 
+ #define SHADOW_PATH (libpbc_config_getstring(p, "shadow_path", "/etc/shadow"))
+ 
