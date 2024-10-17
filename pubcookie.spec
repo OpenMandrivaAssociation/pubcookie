@@ -9,7 +9,7 @@ Version:	3.3.3
 Release:	%mkrel 12
 Group:		System/Servers
 License:	Apache License
-URL:		http://www.pubcookie.org/
+URL:		https://www.pubcookie.org/
 Source0:	http://www.pubcookie.org/downloads/%{name}-%{version}.tar.gz
 Source1:	%{mod_conf}
 Source2:	pubcookie.xinetd
